@@ -1,25 +1,35 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Platform.h"
+#include "Player.h"
 
 using namespace std;
 using namespace sf;
 
 void moveViewUp(View&); 
 
+float dt; 
+Clock dtClock; 
+
 int main()
 {
     double width = VideoMode::getDesktopMode().width;
     double height = VideoMode::getDesktopMode().height; 
+    cout << "(" << width << ", " << height << ")\n"; 
+
+    const float speed = 100.f; 
+    Vector2f velocity;
 
     VideoMode VideoWindow(width, height); 
     RenderWindow window(VideoWindow, "JumpGame");
     Event event; 
     Platform ice; 
-    vector<Sprite> platforms = ice.generator();
-    View view; 
+    vector<Sprite> platforms = ice.generator(width, height);
+    Player player; 
+    Sprite E = player.returnPlayer(); 
+    /*View view; 
     view.zoom(0.99f); 
-    window.setView(view); 
+    window.setView(view); */
 
     Texture backgroundTexture; 
     backgroundTexture.loadFromFile("images/bg.jpg"); 
@@ -30,20 +40,32 @@ int main()
 
     while (window.isOpen())
     {
+        dt = dtClock.restart().asSeconds(); 
+
         while (window.pollEvent(event))
         {
             if (Keyboard::isKeyPressed(Keyboard::Escape)) {window.close();}
             if (event.type == Event::Closed) {window.close();}
-
             if (event.type == Event::MouseButtonPressed)
             {
-                moveViewUp(view); 
+                Vector2i point = Mouse::getPosition(window);
+                cout << "(" << point.x << ", " << point.y << ")\n"; 
             }
 
+            velocity.x = 0; 
+
+            if (Keyboard::isKeyPressed(Keyboard::Left)) {velocity.x += -speed * dt;}
+            if (Keyboard::isKeyPressed(Keyboard::Right)) {velocity.x += speed * dt;}
+            velocity.y += 0.1; 
+
+            E.move(velocity); 
+
         }
+
         window.clear(); 
         window.draw(background); 
         for (int i = 0; i < platforms.size(); i++) { window.draw(platforms[i]); }
+        window.draw(E); 
         window.display(); 
     }
 

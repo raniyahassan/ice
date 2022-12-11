@@ -26,18 +26,25 @@ Vector2f Platform::getPosition()
     return platform.getPosition(); 
 }
 
-vector<Sprite> Platform::generator()
+vector<Sprite> Platform::generator(double width, double height)
 {
     Texture *texture = new Texture;  
-    srand(time(0));
     texture->loadFromFile("images/ice.png");
-    vector<Sprite> x(20); 
+
+    srand(time(0));
+    vector<Sprite> x(30); 
     for (int i = 0; i < x.size(); i++)
     {
         x[i].setTexture(*texture);
         x[i].setPosition(400 + (rand() % 1910), 70 + (rand() % 1070));
         x[i].setScale(0.05, 0.05);
     }
+
+    Sprite y;
+    y.setTexture(*texture);
+    y.setPosition(1400, 1240);
+    y.setScale(0.05,0.05); 
+    x.push_back(y);
 
     return x; 
 }
