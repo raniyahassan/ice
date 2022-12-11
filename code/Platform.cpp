@@ -32,7 +32,7 @@ vector<Sprite> Platform::generator(double width, double height)
     texture->loadFromFile("images/ice.png");
 
     srand(time(0));
-    vector<Sprite> x(30); 
+    vector<Sprite> x(50); 
     for (int i = 0; i < x.size(); i++)
     {
         x[i].setTexture(*texture);

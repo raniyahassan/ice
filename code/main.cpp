@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "Platform.h"
 #include "Player.h"
+#include "Screen.h"
 
 using namespace std;
 using namespace sf;
@@ -31,16 +32,17 @@ int main()
     view.zoom(0.99f); 
     window.setView(view); */
 
-    Texture backgroundTexture; 
-    backgroundTexture.loadFromFile("images/bg.jpg"); 
-    Sprite background(backgroundTexture); 
-    background.setScale(2.4,2.3); 
-    
+    Screen screen; 
+    Sprite background = screen.square(); 
 
+    FloatRect nextPos; 
 
     while (window.isOpen())
     {
         dt = dtClock.restart().asSeconds(); 
+        velocity.y = 2; 
+        E.move(velocity); 
+
 
         while (window.pollEvent(event))
         {
@@ -56,12 +58,25 @@ int main()
 
             if (Keyboard::isKeyPressed(Keyboard::Left)) {velocity.x += -speed * dt;}
             if (Keyboard::isKeyPressed(Keyboard::Right)) {velocity.x += speed * dt;}
-            velocity.y += 0.1; 
+
+            
 
             E.move(velocity); 
 
         }
+        for (int i = 0; i < platforms.size(); i++) 
+            {
+                FloatRect playerBounds = E.getGlobalBounds();
+                FloatRect wallBounds = platforms[i].getGlobalBounds();
 
+                nextPos = playerBounds;
+                nextPos.left += velocity.x;
+
+                if (wallBounds.intersects(nextPos))
+                {
+                    E.move(0, -100);                   
+                }
+            }
         window.clear(); 
         window.draw(background); 
         for (int i = 0; i < platforms.size(); i++) { window.draw(platforms[i]); }
