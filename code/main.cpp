@@ -40,9 +40,8 @@ int main()
     while (window.isOpen())
     {
         dt = dtClock.restart().asSeconds(); 
-        velocity.y = 2; 
+        velocity.y = 4; 
         E.move(velocity); 
-
 
         while (window.pollEvent(event))
         {
@@ -55,11 +54,9 @@ int main()
             }
 
             velocity.x = 0; 
-
             if (Keyboard::isKeyPressed(Keyboard::Left)) {velocity.x += -speed * dt;}
             if (Keyboard::isKeyPressed(Keyboard::Right)) {velocity.x += speed * dt;}
-
-            
+  
 
             E.move(velocity); 
 
@@ -70,7 +67,7 @@ int main()
                 FloatRect wallBounds = platforms[i].getGlobalBounds();
 
                 nextPos = playerBounds;
-                nextPos.left += velocity.x;
+                nextPos.top += (velocity.y - 10);
 
                 if (wallBounds.intersects(nextPos))
                 {
