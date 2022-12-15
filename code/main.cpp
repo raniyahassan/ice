@@ -7,10 +7,10 @@
 using namespace std;
 using namespace sf;
 
-void moveViewUp(View&); 
-
 float dt; 
 Clock dtClock; 
+
+
 
 int main()
 {
@@ -20,17 +20,16 @@ int main()
 
     const float speed = 100.f; 
     Vector2f velocity;
-
-    VideoMode VideoWindow(width, height); 
+    enum STATE {START, PLAYING, END}; 
+    STATE state = START; 
+    VideoMode VideoWindow(width, 2*height); 
     RenderWindow window(VideoWindow, "JumpGame");
     Event event; 
     Platform ice; 
     vector<Sprite> platforms = ice.generator(width, height);
+    vector<Sprite> platforms2 = ice.generator2(width, height);
     Player player; 
     Sprite E = player.returnPlayer(); 
-    /*View view; 
-    view.zoom(0.99f); 
-    window.setView(view); */
 
     Screen screen; 
     Sprite background = screen.square(); 
@@ -42,16 +41,19 @@ int main()
         dt = dtClock.restart().asSeconds(); 
         velocity.y = 4; 
         E.move(velocity); 
+        screen.start(window); 
 
         while (window.pollEvent(event))
         {
             if (Keyboard::isKeyPressed(Keyboard::Escape)) {window.close();}
-            if (event.type == Event::Closed) {window.close();}
-            if (event.type == Event::MouseButtonPressed)
+            if (event.type == Event::MouseButtonPressed) 
             {
-                Vector2i point = Mouse::getPosition(window);
-                cout << "(" << point.x << ", " << point.y << ")\n"; 
+                Vector2i click = Mouse::getPosition(); 
+                cout << "(" << click.x << ", " << click.y << ")\n"; 
+                if(click.x >= 1280 && click.x <=1490 && click.y >= 1028 && click.y <= 1160) { state = PLAYING; } 
+
             }
+            if (event.type == Event::Closed) {window.close();}
 
             velocity.x = 0; 
             if (Keyboard::isKeyPressed(Keyboard::Left)) {velocity.x += -speed * dt;}
@@ -75,19 +77,16 @@ int main()
                 }
             }
         window.clear(); 
-        window.draw(background); 
-        for (int i = 0; i < platforms.size(); i++) { window.draw(platforms[i]); }
-        window.draw(E); 
+        if (state == START) {screen.start(window);}
+        if (state == PLAYING)
+        {
+            screen.move(); 
+            window.draw(background); 
+            for (int i = 0; i < platforms.size(); i++) { window.draw(platforms[i]); }
+            window.draw(E); 
+        }
         window.display(); 
     }
 
-
     return 0; 
-}
-
-void moveViewUp(View& view)
-{
-    Vector2f curr = view.getCenter(); 
-    curr.y +=200; 
-    view.setCenter(curr);
 }

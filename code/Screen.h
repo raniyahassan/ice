@@ -11,9 +11,16 @@ class Screen
 {
     private:
         Texture texture; 
+        Texture texture2; 
+        Texture texture3;
+        Sprite beginningbackground; 
+        Sprite button; 
     public:
         Screen(); 
         Sprite square(); 
+        void start(RenderWindow& window); 
+        void move(); 
+        //void wipeScreen(RenderWindow& window); 
 };
 
 #endif

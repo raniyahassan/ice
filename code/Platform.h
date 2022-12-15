@@ -20,6 +20,7 @@ class Platform
         FloatRect getBounds(); 
         Vector2f getPosition();
         vector<Sprite> generator(double width, double height); 
+        vector<Sprite> generator2(double width, double height); 
 };
 
 #endif
