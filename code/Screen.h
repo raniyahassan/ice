@@ -15,11 +15,13 @@ class Screen
         Texture texture3;
         Sprite beginningbackground; 
         Sprite button; 
+        Sprite logo; 
     public:
-        Screen(); 
+        Screen(double,double); 
         Sprite square(); 
-        void start(RenderWindow& window); 
+        void start(RenderWindow&); 
         void move(); 
+        FloatRect getBounds(); 
         //void wipeScreen(RenderWindow& window); 
 };
 

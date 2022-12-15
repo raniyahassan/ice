@@ -1,6 +1,6 @@
 #include "Screen.h"
 
-Screen::Screen() 
+Screen::Screen(double width, double height) 
 {
     Texture *texture2 = new Texture; 
     texture2->loadFromFile("images/bg.jpg"); 
@@ -9,9 +9,19 @@ Screen::Screen()
 
     Texture *texture3 = new Texture;
     texture3->loadFromFile("images/start.png"); 
-    button.setTexture(*texture3);    
-    button.setPosition(1270,841);  
-    button.setScale(0.5,0.5); 
+    button.setTexture(*texture3); 
+    button.setScale(0.8,0.8);    
+    FloatRect bound = button.getGlobalBounds();
+    button.setPosition((width/2)-(bound.width/2), 841);  
+    
+    Texture *texture4 = new Texture;
+    texture4->loadFromFile("images/i.png");
+    logo.setTexture(*texture4);
+    logo.setScale(0.9, 0.9); 
+    FloatRect bound2 = logo.getGlobalBounds();
+    logo.setPosition((width/2)-(bound2.width/2), 200);  
+    
+    //logo.setPosition(800, 200);
 }; 
 
 Sprite Screen::square()
@@ -29,18 +39,7 @@ void Screen::start(RenderWindow& window)
 {
 	window.draw(beginningbackground); 
     window.draw(button); 
-}
-
-bool Screen::begin(Vector2i click)
-{
-    FloatRect buttonArea = button.getGlobalBounds(); 
-    float x = click.x; 
-    float y = click.y;
-    if (buttonArea.contains(x, y))
-    {
-        return true;
-    }
-    return false; 
+    window.draw(logo); 
 }
 
 void Screen::move()
@@ -48,3 +47,9 @@ void Screen::move()
     beginningbackground.setScale(0.000001, 0.000001); 
     button.move(-1000,-1000); 
 }
+
+FloatRect Screen::getBounds()
+{
+    return button.getGlobalBounds(); 
+}
+

@@ -11,7 +11,6 @@ float dt;
 Clock dtClock; 
 
 
-
 int main()
 {
     double width = VideoMode::getDesktopMode().width;
@@ -31,7 +30,7 @@ int main()
     Player player; 
     Sprite E = player.returnPlayer(); 
 
-    Screen screen; 
+    Screen screen(width, height); 
     Sprite background = screen.square(); 
 
     FloatRect nextPos; 
@@ -49,9 +48,9 @@ int main()
             if (event.type == Event::MouseButtonPressed) 
             {
                 Vector2i click = Mouse::getPosition(); 
-                cout << "(" << click.x << ", " << click.y << ")\n"; 
-                if(click.x >= 1280 && click.x <=1490 && click.y >= 1028 && click.y <= 1160) { state = PLAYING; } 
-
+                FloatRect bound = screen.getBounds(); 
+                if(click.x >= bound.left && click.x <= (bound.left + bound.width) && click.y <= bound.left && click.y >= (bound.left - bound.width/2)) 
+                    state = PLAYING;            
             }
             if (event.type == Event::Closed) {window.close();}
 
